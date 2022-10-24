@@ -50,15 +50,15 @@ jobs:
           push: ${{ github.ref == 'refs/heads/main }}
 
       - name: Build image and push database
-          # DO the same for database
+        uses: docker/build-push-action@v2 
+        with:
           context: ../../database
-          # Note: tags has to be all lower-case
           tags:  ${{secrets.DOCKER_HUP_USER}}/tp-devops-epf/database
           push: ${{ github.ref == 'refs/heads/main }}
-
-
+          
       - name: Build image and push httpd
-        # DO the same for httpd
+        uses: docker/build-push-action@v2 
+        with:
           context: ../../httpd
           tags:  ${{secrets.DOCKER_HUP_USER}}/tp-devops-epf/httpd
           push: ${{ github.ref == 'refs/heads/main }}
