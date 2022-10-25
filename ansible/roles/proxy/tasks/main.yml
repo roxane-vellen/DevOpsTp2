@@ -1,0 +1,10 @@
+---
+# tasks file for roles/proxy
+    - name: Create a httpd container
+      docker_container:
+        name: httpd
+        image: roxaen/tp-devops-epf:httpd
+        networks:
+          - name: "app-network"
+        ports:
+          - "80:80"
