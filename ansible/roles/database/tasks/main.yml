@@ -4,9 +4,10 @@
       docker_container:
         name: database
         image: roxaen/tp-devops-epf:database
+        state: started
         env:
-          POSTGRES_PASSWORD=pwd
-          POSTGRES_USER=usr
-          POSTGRES_DB=db
+          POSTGRES_PASSWORD: "pwd"
+          POSTGRES_USER: "usr"
+          POSTGRES_DB: "db"
         networks:
           - name: "app-network"
