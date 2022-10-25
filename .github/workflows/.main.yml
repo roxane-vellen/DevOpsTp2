@@ -22,8 +22,8 @@ jobs:
 
      #finally build your app with the latest command
       - name: Build and test with Maven
-        run: mvn clean verify -f simple-api/pom.xml #TODO
-
+        #run: mvn clean verify -f simple-api/pom.xml #TODO
+        run: mvn -B verify sonar:sonar -Dsonar.projectKey=roxane-vellen_DevOpsTp2 -Dsonar.organization=roxane-vellen -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}  --file ./simple-api/pom.xml
         
   # define job to build and publish docker image
   build-and-push-docker-image:
@@ -36,34 +36,34 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      
+      - name: Login to DockerHub
+        run: docker login -u ${{ secrets.DOCKER_HUP_USER }} -p ${{ secrets.DOCKER_HUP_TOKEN }}
 
       - name: Build image and push backend
         uses: docker/build-push-action@v2 
         with:
           # relative path to the place where source code with Dockerfile is located
-          context: ../../simple-api
+          context: ./simple-api
           # Note: tags has to be all lower-case
-          tags:  ${{secrets.DOCKER_HUP_USER}}/tp-devops-epf/simple-api
+          tags:  ${{secrets.DOCKER_HUP_USER}}/tp-devops-epf:simple-api
           # build on feature branches, push only on main branch
           push: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Build image and push database
         uses: docker/build-push-action@v2 
         with:
-          context: ../../database
-          tags:  ${{secrets.DOCKER_HUP_USER}}/tp-devops-epf/database
+          context: ./database
+          tags:  ${{secrets.DOCKER_HUP_USER}}/tp-devops-epf:database
           push: ${{ github.ref == 'refs/heads/main' }}
           
       - name: Build image and push httpd
         uses: docker/build-push-action@v2 
         with:
-          context: ../../httpd
-          tags:  ${{secrets.DOCKER_HUP_USER}}/tp-devops-epf/httpd
+          context: ./httpd
+          tags:  ${{secrets.DOCKER_HUP_USER}}/tp-devops-epf:httpd
           push: ${{ github.ref == 'refs/heads/main' }}
 
-      - name: Login to DockerHub
-        run: docker login -u ${{ secrets.DOCKER_HUP_USER }} -p ${{ secrets.DOCKER_HUP_PASSWORD }}
+      
 
         
 
